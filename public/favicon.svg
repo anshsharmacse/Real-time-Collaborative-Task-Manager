@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="tf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#tf-grad)"/>
+  <g fill="white">
+    <path d="M16 6 L18 12 L24 14 L18 16 L16 22 L14 16 L8 14 L14 12 L16 6Z" opacity="0.95"/>
+    <circle cx="16" cy="14" r="2" opacity="0.8"/>
+  </g>
+</svg>
