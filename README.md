@@ -1,11 +1,6 @@
 # TaskFlow
 
 # Real-time Collaborative Task Manager
-
-<div align="center">
-
-![TaskFlow Logo](https://api.dicebear.com/7.x/shapes/svg?seed=taskflow&backgroundColor=10b981)
-
 ### A modern, production-ready collaborative task management application
 
 ### Featuring real-time updates, Google authentication, and seamless task assignment
