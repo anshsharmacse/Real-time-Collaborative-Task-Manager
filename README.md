@@ -1,9 +1,12 @@
 # TaskFlow
 
 # Real-time Collaborative Task Manager
-### A modern, production-ready collaborative task management application
-<img width="1919" height="807" alt="image" src="https://github.com/user-attachments/assets/51a005b8-c81d-4ee2-bc37-7d1f13de1736" />
 
+<div align="center">
+<img width="1881" height="862" alt="image" src="https://github.com/user-attachments/assets/35dee6bc-688c-4d00-aaf2-1ffa5d6ee516" />
+
+
+### A modern, production-ready collaborative task management application
 
 ### Featuring real-time updates, Google authentication, and seamless task assignment
 
@@ -43,7 +46,11 @@
 3. Enter any email address (e.g., `demo@example.com`)
 4. Start creating and assigning tasks instantly
 
+<img width="1895" height="896" alt="image" src="https://github.com/user-attachments/assets/322dde47-a73c-44d7-909d-ada2edc7c008" />
+
+
 **No Google account required for demo access.**
+**You may Sign In using your Google Account to access Tasks and Assign Tasks**
 
 ---
 
