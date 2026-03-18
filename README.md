@@ -1,17 +1,10 @@
 # TaskFlow - Real-time Collaborative Task Manager
 
-> A modern, production-ready collaborative task management application with real-time updates, Google authentication, and seamless task assignment by email.
-
-![TaskFlow Banner](./docs/banner.png)
-
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
-[![Socket.io](https://img.shields.io/badge/Socket.io-Real--time-010101?style=flat-square&logo=socket.io)](https://socket.io/)
+A modern, production-ready collaborative task management application featuring real-time updates, Google authentication, and seamless task assignment by email.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Live Demo](#live-demo)
@@ -22,12 +15,13 @@
 - [Authentication Flow](#authentication-flow)
 - [Real-time Architecture](#real-time-architecture)
 - [API Design](#api-design)
-- [UI/UX Design](#uiux-design)
+- [UI Component Design](#ui-component-design)
+- [State Management](#state-management)
 - [Deployment Guide](#deployment-guide)
 - [Local Development](#local-development)
 - [Testing](#testing)
 - [AI Usage Disclosure](#ai-usage-disclosure)
-- [Assumptions & Trade-offs](#assumptions--trade-offs)
+- [Assumptions and Trade-offs](#assumptions-and-trade-offs)
 - [Known Limitations](#known-limitations)
 - [Future Improvements](#future-improvements)
 - [Developer](#developer)
@@ -38,91 +32,83 @@
 
 TaskFlow is a real-time collaborative task manager built for modern teams. It enables users to create, manage, and assign tasks seamlessly while providing instant updates through WebSocket technology.
 
-### Project Timeline
+### Project Context
 
 | Aspect | Details |
 |--------|---------|
-| **Expected Time** | 6–10 hours |
-| **Deadline** | March 21, 2026, 11:59 PM |
-| **Submission** | GitHub Repository Link |
+| Expected Time | 6 to 10 hours |
+| Deadline | March 21, 2026, 11:59 PM |
+| Submission | GitHub Repository Link |
+
+### Problem Statement
+
+The goal is to build a Real-time Collaborative Task Manager that demonstrates secure authentication, relational data management, premium user interface design, and end-to-end deployment capabilities.
 
 ---
 
 ## Live Demo
 
- 🌐 **Production URL**: [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
+**Production URL:** [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
 
- 🔌 **Socket Service**: [https://taskflow-socket-production.up.railway.app](https://taskflow-socket-production.up.railway.app)
+**Socket Service:** [https://taskflow-socket-production.up.railway.app](https://taskflow-socket-production.up.railway.app)
 
- 📦 **GitHub Repository**: [https://github.com/anshsharmacse/taskflow](https://github.com/anshsharmacse/taskflow)
+**GitHub Repository:** [https://github.com/anshsharmacse/taskflow](https://github.com/anshsharmacse/taskflow)
 
-### Demo Credentials
+### Quick Demo Access
 
-- **Demo Login**: Click "Demo Login" and enter any email (e.g., `demo@example.com`)
-- **Google Sign In**: Use your Google account
+- **Demo Login:** Click "Demo Login" button and enter any email address
+- **Google Sign In:** Use your Google account for full OAuth experience
 
 ---
 
 ## Features
 
-### Core Features
+### Core Functionality
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| 🔐 Google Authentication | Secure OAuth 2.0 login with Google | ✅ |
-| 📧 Demo Login | Try the app instantly without Google account | ✅ |
-| 📋 Task CRUD | Create, Read, Update, Delete tasks | ✅ |
-| 👥 Task Assignment | Assign tasks by email address | ✅ |
-| ⚡ Real-time Updates | Live task updates via WebSockets | ✅ |
-| 🌙 Dark Mode | Full theme support | ✅ |
-| 📱 Responsive Design | Desktop, Tablet, Mobile | ✅ |
-
-### Feature Screenshots
-
-> 📸 *Add screenshots here after deployment*
-
-| Landing Page | Dashboard | Task Creation |
-|--------------|-----------|---------------|
-| ![Landing](./docs/screenshots/landing.png) | ![Dashboard](./docs/screenshots/dashboard.png) | ![Create Task](./docs/screenshots/create-task.png) |
-
-| Task Assignment | Real-time Updates | Dark Mode |
-|-----------------|-------------------|-----------|
-| ![Assign](./docs/screenshots/assign.png) | ![Realtime](./docs/screenshots/realtime.png) | ![Dark](./docs/screenshots/dark-mode.png) |
+| Google Authentication | Secure OAuth 2.0 login with Google | Implemented |
+| Demo Login | Instant access without Google account | Implemented |
+| Task CRUD Operations | Create, read, update, and delete tasks | Implemented |
+| Task Assignment | Assign tasks to users by email address | Implemented |
+| Real-time Updates | Live task synchronization via WebSockets | Implemented |
+| Dark Mode | Complete theme switching support | Implemented |
+| Responsive Design | Optimized for desktop, tablet, and mobile | Implemented |
 
 ---
 
 ## System Architecture
 
-### High-Level Architecture Overview
+### High-Level Architecture
+
+The application follows a modern three-tier architecture with separated frontend and real-time services.
 
 ```mermaid
 graph TB
-    subgraph "Client Layer"
+    subgraph Client Layer
         Browser[Web Browser]
         Mobile[Mobile Browser]
     end
     
-    subgraph "Frontend - Vercel"
-        NextApp[Next.js App]
+    subgraph Frontend - Vercel
+        NextApp[Next.js Application]
         SSR[Server-Side Rendering]
-        PWA[Progressive Web App]
     end
     
-    subgraph "Backend Services"
+    subgraph Backend Services
         API[REST API Routes]
         Auth[NextAuth.js]
         Socket[Socket.io Server]
     end
     
-    subgraph "Data Layer"
-        PostgreSQL[(PostgreSQL)]
-        Redis[(Session Cache)]
+    subgraph Data Layer
+        PostgreSQL[(PostgreSQL Database)]
     end
     
-    subgraph "External Services"
+    subgraph External Services
         Google[Google OAuth]
         Supabase[Supabase Hosting]
-        Railway[Railway Socket]
+        Railway[Railway Socket Hosting]
     end
     
     Browser --> NextApp
@@ -138,130 +124,105 @@ graph TB
     PostgreSQL --> Supabase
 ```
 
-### System Components Diagram
+### Architecture Explanation
 
-```mermaid
-graph LR
-    subgraph "User Interface"
-        A[Landing Page]
-        B[Dashboard]
-        C[Task Board]
-        D[User Profile]
-    end
-    
-    subgraph "Core Services"
-        E[Authentication Service]
-        F[Task Service]
-        G[Notification Service]
-    end
-    
-    subgraph "Data Services"
-        H[User Repository]
-        I[Task Repository]
-        J[Session Store]
-    end
-    
-    A --> E
-    B --> F
-    B --> G
-    C --> F
-    D --> E
-    
-    E --> H
-    E --> J
-    F --> I
-    G --> H
-```
+The system is designed with clear separation of concerns:
 
-### Request Flow Diagram
+**Frontend Layer:** The Next.js application handles server-side rendering for optimal SEO and performance. It communicates with both the REST API and the Socket.io server.
+
+**Backend Layer:** API routes handle CRUD operations while NextAuth.js manages authentication. The socket server handles all real-time communication.
+
+**Data Layer:** PostgreSQL database hosted on Supabase provides reliable data persistence with ACID compliance.
+
+### Component Interaction Flow
 
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant C as Client (Next.js)
-    participant A as API Layer
-    participant D as Database
-    participant S as Socket Server
-    participant O as Other Users
+    participant User
+    participant Client
+    participant API
+    participant Database
+    participant Socket
+    participant OtherUsers
     
-    U->>C: Create Task
-    C->>A: POST /api/tasks
-    A->>D: Insert Task
-    D-->>A: Task Created
-    A-->>C: Task Response
-    C->>S: Emit task:created
-    S->>O: Broadcast task:assigned
-    O-->>U: Real-time Update
+    User->>Client: Create Task
+    Client->>API: POST /api/tasks
+    API->>Database: Insert Task
+    Database-->>API: Task Created
+    API-->>Client: Task Response
+    Client->>Socket: Emit task created
+    Socket->>OtherUsers: Broadcast task assigned
+    OtherUsers-->>User: Real-time UI Update
 ```
 
 ---
 
 ## Tech Stack
 
-### Technology Decision Matrix
+### Technology Selection Rationale
 
 ```mermaid
 mindmap
-  root((TaskFlow))
+  root((TaskFlow Stack))
     Frontend
       Next.js 16
-        App Router
-        Server Components
-        API Routes
+        App Router for modern routing
+        Server Components for performance
+        Built-in API routes
       TypeScript
-        Type Safety
-        Better DX
+        Type safety throughout
+        Enhanced developer experience
       Tailwind CSS 4
-        Utility First
-        Custom Theme
+        Utility-first styling
+        Custom design system
       shadcn/ui
-        Accessible
-        Customizable
+        Accessible components
+        Fully customizable
       Framer Motion
-        Smooth Animations
-        Gestures
+        Smooth animations
+        Gesture support
     Backend
       NextAuth.js v4
-        Google OAuth
-        JWT Sessions
+        Google OAuth provider
+        JWT session strategy
       Prisma ORM
-        Type-safe Queries
-        Migrations
+        Type-safe queries
+        Database migrations
       Socket.io
-        WebSocket
-        Fallback Polling
+        WebSocket communication
+        Automatic reconnection
     Database
-      SQLite
-        Development
-        Local Testing
-      PostgreSQL
-        Production
-        Supabase
+      SQLite for Development
+        Zero configuration
+        Fast local testing
+      PostgreSQL for Production
+        Supabase hosting
+        Reliable and scalable
     Deployment
-      Vercel
-        Frontend Hosting
-        Edge Functions
-      Railway
-        Socket Service
-        WebSocket Support
+      Vercel for Frontend
+        Edge functions
+        Automatic deployments
+      Railway for Socket Service
+        WebSocket support
+        Simple configuration
 ```
 
-### Detailed Tech Stack
+### Technology Details
 
 | Category | Technology | Version | Purpose |
 |----------|------------|---------|---------|
-| **Framework** | Next.js | 16.x | Full-stack React framework |
-| **Language** | TypeScript | 5.x | Type safety & better DX |
-| **Styling** | Tailwind CSS | 4.x | Utility-first CSS |
-| **UI Components** | shadcn/ui | Latest | Accessible component library |
-| **Database ORM** | Prisma | 6.x | Type-safe database access |
-| **Database** | PostgreSQL | 15.x | Production database |
-| **Authentication** | NextAuth.js | 4.x | OAuth & session management |
-| **Real-time** | Socket.io | 4.x | WebSocket communication |
-| **State Management** | Zustand | 5.x | Client state |
-| **Animations** | Framer Motion | 12.x | UI animations |
-| **Forms** | React Hook Form | 7.x | Form handling |
-| **Validation** | Zod | 4.x | Schema validation |
+| Framework | Next.js | 16.x | Full-stack React framework with App Router |
+| Language | TypeScript | 5.x | Type safety and improved developer experience |
+| Styling | Tailwind CSS | 4.x | Utility-first CSS framework |
+| UI Components | shadcn/ui | Latest | Accessible, customizable components |
+| Database ORM | Prisma | 6.x | Type-safe database access and migrations |
+| Database | PostgreSQL | 15.x | Production database hosted on Supabase |
+| Authentication | NextAuth.js | 4.x | OAuth and session management |
+| Real-time | Socket.io | 4.x | WebSocket-based real-time communication |
+| State Management | Zustand | 5.x | Lightweight client state management |
+| Animations | Framer Motion | 12.x | Declarative animations |
+| Form Handling | React Hook Form | 7.x | Performant form management |
+| Validation | Zod | 4.x | Schema validation |
 
 ---
 
@@ -269,10 +230,13 @@ mindmap
 
 ### Entity Relationship Diagram
 
+The database consists of two primary entities: Users and Tasks. The relationship supports both task creation and assignment.
+
 ```mermaid
 erDiagram
-    USER ||--o{ TASK : "creates"
-    USER ||--o{ TASK : "assigned to"
+    USER ||--o{ TASK : creates
+    USER ||--o{ TASK : assigned to
+    
     USER {
         string id PK
         string email UK
@@ -299,45 +263,19 @@ erDiagram
         datetime completedAt
     }
     
-    TASK }|--|| USER : "creator"
-    TASK }|--o| USER : "assignee"
+    TASK }|--|| USER : creator
+    TASK }|--o| USER : assignee
 ```
 
-### Database Schema Flow
+### Database Schema Explanation
 
-```mermaid
-flowchart TD
-    subgraph "User Table"
-        U1[id: string PK]
-        U2[email: string UK]
-        U3[name: string?]
-        U4[image: string?]
-        U5[googleId: string? UK]
-        U6[emailVerified: datetime?]
-        U7[createdAt: datetime]
-        U8[updatedAt: datetime]
-    end
-    
-    subgraph "Task Table"
-        T1[id: string PK]
-        T2[title: string]
-        T3[description: string?]
-        T4[status: enum]
-        T5[priority: enum]
-        T6[dueDate: datetime?]
-        T7[creatorId: string FK]
-        T8[assigneeId: string? FK]
-        T9[assigneeEmail: string?]
-        T10[createdAt: datetime]
-        T11[updatedAt: datetime]
-        T12[completedAt: datetime?]
-    end
-    
-    U1 --> T7
-    U1 --> T8
-```
+**User Table:** Stores user information including OAuth identifiers. The `googleId` field links Google accounts while `emailVerified` tracks verification status.
+
+**Task Table:** Contains all task data with foreign key relationships to both creator and optional assignee. The `assigneeEmail` field supports assigning tasks to users who have not yet registered.
 
 ### Task Status State Machine
+
+Tasks transition through a defined state lifecycle:
 
 ```mermaid
 stateDiagram-v2
@@ -345,34 +283,21 @@ stateDiagram-v2
     PENDING --> IN_PROGRESS: Start Working
     IN_PROGRESS --> COMPLETED: Mark Complete
     IN_PROGRESS --> PENDING: Move Back
-    COMPLETED --> IN_PROGRESS: Reopen
-    COMPLETED --> [*]: Delete
-    PENDING --> [*]: Delete
-```
-
-### Task Priority Levels
-
-```mermaid
-graph LR
-    subgraph "Priority Levels"
-        LOW[🟢 LOW]
-        MEDIUM[🟡 MEDIUM]
-        HIGH[🔴 HIGH]
-    end
-    
-    subgraph "Default Behavior"
-        D[Default: MEDIUM]
-    end
-    
-    D --> MEDIUM
+    COMPLETED --> IN_PROGRESS: Reopen Task
+    COMPLETED --> [*]: Delete Task
+    PENDING --> [*]: Delete Task
 ```
 
 ### Database Indexes
 
+The following indexes optimize query performance:
+
 ```sql
--- Performance indexes
+-- User table indexes
 CREATE INDEX users_email_idx ON users(email);
 CREATE INDEX users_googleId_idx ON users("googleId");
+
+-- Task table indexes
 CREATE INDEX tasks_creatorId_idx ON tasks("creatorId");
 CREATE INDEX tasks_assigneeId_idx ON tasks("assigneeId");
 CREATE INDEX tasks_status_idx ON tasks(status);
@@ -383,107 +308,85 @@ CREATE INDEX tasks_priority_idx ON tasks(priority);
 
 ## Authentication Flow
 
-### Google OAuth Flow
+### Google OAuth Authentication
+
+The application uses NextAuth.js with Google OAuth for secure authentication.
 
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant C as Client
-    participant N as NextAuth
-    participant G as Google OAuth
-    participant D as Database
+    participant User
+    participant Client
+    participant NextAuth
+    participant Google
+    participant Database
     
-    U->>C: Click "Sign in with Google"
-    C->>N: Request Google Auth
-    N->>G: Redirect to Google
-    G->>U: Show Consent Screen
-    U->>G: Grant Permission
-    G->>N: Return Auth Code
-    N->>G: Exchange Code for Token
-    G->>N: Return Access Token
-    N->>D: Find/Create User
-    D->>N: User Data
-    N->>C: Create Session
-    C->>U: Redirect to Dashboard
+    User->>Client: Click Sign in with Google
+    Client->>NextAuth: Request Google Auth
+    NextAuth->>Google: Redirect to OAuth
+    Google->>User: Show Consent Screen
+    User->>Google: Grant Permission
+    Google->>NextAuth: Return Auth Code
+    NextAuth->>Google: Exchange Code for Token
+    Google->>NextAuth: Return Access Token
+    NextAuth->>Database: Find or Create User
+    Database->>NextAuth: User Data
+    NextAuth->>Client: Create JWT Session
+    Client->>User: Redirect to Dashboard
 ```
 
 ### Demo Login Flow
 
+For users without Google accounts or for testing purposes:
+
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant C as Client
-    participant A as API
-    participant D as Database
+    participant User
+    participant Client
+    participant API
+    participant Database
     
-    U->>C: Click "Demo Login"
-    U->>C: Enter Email
-    C->>A: POST /api/auth/callback/demo-credentials
-    A->>D: Find User by Email
+    User->>Client: Click Demo Login
+    User->>Client: Enter Email Address
+    Client->>API: POST credentials
+    API->>Database: Find User by Email
     
     alt User Exists
-        D-->>A: Return User
+        Database-->>API: Return Existing User
     else User Not Found
-        A->>D: Create New User
-        D-->>A: Return New User
+        API->>Database: Create New User
+        Database-->>API: Return New User
     end
     
-    A-->>C: Create JWT Session
-    C->>U: Redirect to Dashboard
+    API-->>Client: Create JWT Session
+    Client->>User: Redirect to Dashboard
 ```
 
 ### Session Management
 
+The application uses JWT-based sessions for stateless authentication:
+
 ```mermaid
 flowchart LR
-    subgraph "JWT Strategy"
-        A[User Login] --> B[Generate JWT]
-        B --> C[Store in Cookie]
+    subgraph JWT Strategy
+        A[User Login] --> B[Generate JWT Token]
+        B --> C[Store in HttpOnly Cookie]
         C --> D[Subsequent Requests]
-        D --> E[Validate JWT]
-        E --> F{Valid?}
+        D --> E[Validate JWT Token]
+        E --> F{Token Valid?}
         F -->|Yes| G[Allow Access]
         F -->|No| H[Redirect to Login]
     end
 ```
 
-### Authentication Architecture
+### Authentication Callbacks
 
-```mermaid
-graph TB
-    subgraph "Auth Providers"
-        GP[Google Provider]
-        DP[Demo Provider]
-    end
-    
-    subgraph "NextAuth.js"
-        CB[Callbacks]
-        EV[Events]
-        JW[JWT Strategy]
-    end
-    
-    subgraph "Session Handling"
-        TK[Token Generation]
-        VA[Validation]
-        RF[Refresh]
-    end
-    
-    subgraph "User Management"
-        CR[Create User]
-        UP[Update User]
-        LK[Lookup User]
-    end
-    
-    GP --> CB
-    DP --> CB
-    CB --> JW
-    JW --> TK
-    TK --> VA
-    VA --> RF
-    CB --> CR
-    CB --> UP
-    CB --> LK
-```
+The authentication system implements custom callbacks for user management:
+
+| Callback | Purpose |
+|----------|---------|
+| signIn | Create or update user in database on first login |
+| jwt | Add user ID to JWT token |
+| session | Expose user ID in client session |
 
 ---
 
@@ -491,268 +394,211 @@ graph TB
 
 ### Socket.io Connection Flow
 
+Real-time updates are powered by Socket.io with automatic reconnection and fallback to polling.
+
 ```mermaid
 sequenceDiagram
-    participant C as Client
-    participant S as Socket Server
-    participant D as Database
-    participant O as Other Clients
+    participant Client
+    participant SocketServer
+    participant Database
+    participant OtherClients
     
-    C->>S: Connect (WebSocket)
-    S->>C: Connection Acknowledged
-    C->>S: Authenticate (userId, email)
-    S->>S: Register User
-    S->>C: Authenticated
+    Client->>SocketServer: Connect via WebSocket
+    SocketServer->>Client: Connection Acknowledged
+    Client->>SocketServer: Authenticate with userId
+    SocketServer->>SocketServer: Register User in Room
+    SocketServer->>Client: Authentication Confirmed
     
-    Note over C,O: Task Created Event
-    C->>S: Emit task:created
-    S->>D: Task Saved
-    S->>O: Broadcast task:assigned
-    O->>O: Update UI in Real-time
+    Note over Client,OtherClients: Task Creation Event
+    Client->>SocketServer: Emit task created event
+    SocketServer->>Database: Task Saved
+    SocketServer->>OtherClients: Broadcast to assignee room
+    OtherClients->>OtherClients: Update UI Instantly
 ```
 
-### Socket Event Flow
+### Socket Event Types
 
 ```mermaid
 flowchart TD
-    subgraph "Client Events (Emit)"
-        CE1[task:created]
-        CE2[task:updated]
-        CE3[task:deleted]
-        CE4[authenticate]
+    subgraph Client to Server Events
+        C1[task created - New task notification]
+        C2[task updated - Task modification]
+        C3[task deleted - Task removal]
+        C4[authenticate - User identification]
     end
     
-    subgraph "Server Events (Broadcast)"
-        SE1[task:assigned]
-        SE2[task:updated]
-        SE3[task:deleted]
-        SE4[authenticated]
+    subgraph Server to Client Events
+        S1[task assigned - Notification to assignee]
+        S2[task updated - Broadcast to stakeholders]
+        S3[task deleted - Removal notification]
+        S4[authenticated - Confirmation response]
     end
     
-    subgraph "Room Management"
-        RM1[User Room: user:userId]
-        RM2[Email Room: email:userEmail]
+    C1 --> S1
+    C2 --> S2
+    C3 --> S3
+    C4 --> S4
+```
+
+### Room-based Broadcasting
+
+Users are organized into rooms based on their user ID and email address for targeted notifications:
+
+```mermaid
+flowchart LR
+    subgraph User Rooms
+        R1[Room: user slash userId]
+        R2[Room: email slash userEmail]
     end
     
-    CE1 --> SE1
-    CE2 --> SE2
-    CE3 --> SE3
-    CE4 --> RM1
-    CE4 --> RM2
-    RM1 --> SE1
-    RM2 --> SE2
+    subgraph Broadcasting Logic
+        B1[Task Creator Room]
+        B2[Task Assignee Room]
+        B3[Email-based Room]
+    end
+    
+    R1 --> B1
+    R2 --> B3
+    B2 --> B3
 ```
 
 ### Real-time Update Scenarios
 
-```mermaid
-stateDiagram-v2
-    [*] --> TaskCreated
-    TaskCreated --> NotifyCreator: Creator gets confirmation
-    TaskCreated --> NotifyAssignee: Assignee gets notification
-    
-    state NotifyAssignee {
-        [*] --> CheckOnline
-        CheckOnline --> SendSocket: User Connected
-        CheckOnline --> StoreForLater: User Offline
-        SendSocket --> UpdateUI
-        StoreForLater --> ShowOnNextLogin
-    }
-    
-    NotifyCreator --> [*]
-    NotifyAssignee --> [*]
-```
-
-### Socket Service Architecture
-
-```mermaid
-graph TB
-    subgraph "Railway Deployment"
-        SS[Socket.io Server]
-        
-        subgraph "Connection Handling"
-            CO[Connection Manager]
-            AU[Authentication]
-            RM[Room Manager]
-        end
-        
-        subgraph "Event Handlers"
-            TC[Task Created]
-            TU[Task Updated]
-            TD[Task Deleted]
-        end
-        
-        subgraph "User Tracking"
-            UM[User Map]
-            EM[Email to Socket Map]
-        end
-    end
-    
-    subgraph "Vercel Frontend"
-        CL[Next.js Client]
-    end
-    
-    CL <--> SS
-    SS --> CO
-    CO --> AU
-    AU --> RM
-    RM --> TC
-    RM --> TU
-    RM --> TD
-    AU --> UM
-    AU --> EM
-```
+| Scenario | Event | Notification Target |
+|----------|-------|---------------------|
+| Task Created | task created | Assignee if specified |
+| Task Updated | task updated | Creator and Assignee |
+| Task Deleted | task deleted | Assignee if exists |
+| Status Changed | task updated | All stakeholders |
 
 ---
 
 ## API Design
 
-### REST API Endpoints
+### RESTful Endpoints
 
 ```mermaid
 graph LR
-    subgraph "Authentication"
+    subgraph Authentication Endpoints
         A1[POST /api/auth/signin]
         A2[POST /api/auth/signout]
         A3[GET /api/auth/session]
         A4[GET /api/auth/callback/google]
     end
     
-    subgraph "Tasks"
+    subgraph Task Endpoints
         T1[GET /api/tasks]
         T2[POST /api/tasks]
-        T3[PUT /api/tasks/:id]
-        T4[DELETE /api/tasks/:id]
-    end
-    
-    subgraph "Response Codes"
-        R1[200 OK]
-        R2[201 Created]
-        R3[400 Bad Request]
-        R4[401 Unauthorized]
-        R5[500 Server Error]
+        T3[PUT /api/tasks/id]
+        T4[DELETE /api/tasks/id]
     end
 ```
 
-### API Request/Response Flow
+### API Request Response Flow
 
 ```mermaid
 sequenceDiagram
-    participant C as Client
-    participant M as Middleware
-    participant H as Handler
-    participant V as Validator
-    participant D as Database
+    participant Client
+    participant Middleware
+    participant Handler
+    participant Validator
+    participant Database
     
-    C->>M: HTTP Request
-    M->>M: Check Auth
+    Client->>Middleware: HTTP Request
+    Middleware->>Middleware: Check Authentication
+    
     alt Not Authenticated
-        M-->>C: 401 Unauthorized
+        Middleware-->>Client: 401 Unauthorized
     else Authenticated
-        M->>H: Forward Request
-        H->>V: Validate Input
+        Middleware->>Handler: Forward Request
+        Handler->>Validator: Validate Input
+        
         alt Invalid Input
-            V-->>H: Validation Error
-            H-->>C: 400 Bad Request
+            Validator-->>Handler: Validation Error
+            Handler-->>Client: 400 Bad Request
         else Valid Input
-            V->>D: Execute Query
-            D-->>V: Result
-            V-->>H: Data
-            H-->>C: 200/201 Response
+            Validator->>Database: Execute Query
+            Database-->>Validator: Result Data
+            Validator-->>Handler: Processed Data
+            Handler-->>Client: 200 or 201 Response
         end
     end
 ```
 
-### Task API Detailed Flow
+### Endpoint Specifications
 
-```mermaid
-flowchart TD
-    subgraph "GET /api/tasks"
-        G1[Check Session] --> G2{Authenticated?}
-        G2 -->|No| G3[Return 401]
-        G2 -->|Yes| G4[Query Tasks]
-        G4 --> G5[User's Tasks + Assigned Tasks]
-        G5 --> G6[Return 200 with Tasks]
-    end
-    
-    subgraph "POST /api/tasks"
-        P1[Check Session] --> P2{Authenticated?}
-        P2 -->|No| P3[Return 401]
-        P2 -->|Yes| P4[Validate Body]
-        P4 --> P5{Valid?}
-        P5 -->|No| P6[Return 400]
-        P5 -->|Yes| P7[Check Assignee Email]
-        P7 --> P8[Create Task]
-        P8 --> P9[Return 201]
-    end
-```
+**GET /api/tasks**
 
-### Data Validation Schema
+Retrieves all tasks for the authenticated user, including tasks they created and tasks assigned to them.
 
-```mermaid
-graph TB
-    subgraph "Create Task Validation"
-        V1[title: string, 1-100 chars]
-        V2[description: string?, max 500 chars]
-        V3[priority: enum LOW|MEDIUM|HIGH]
-        V4[dueDate: Date?]
-        V5[assigneeEmail: email?]
-    end
-    
-    subgraph "Update Task Validation"
-        U1[title: string?]
-        U2[description: string?]
-        U3[status: enum PENDING|IN_PROGRESS|COMPLETED]
-        U4[priority: enum?]
-        U5[dueDate: Date?]
-        U6[assigneeEmail: email?]
-    end
-    
-    V1 --> D1[(Zod Schema)]
-    V2 --> D1
-    V3 --> D1
-    V4 --> D1
-    V5 --> D1
-    
-    U1 --> D2[(Zod Schema)]
-    U2 --> D2
-    U3 --> D2
-    U4 --> D2
-    U5 --> D2
-    U6 --> D2
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| Response | Task Array | List of tasks with creator and assignee data |
+
+**POST /api/tasks**
+
+Creates a new task with optional assignment.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| title | string | Yes | Task title, 1-100 characters |
+| description | string | No | Task description, max 500 characters |
+| priority | enum | No | LOW, MEDIUM, or HIGH, defaults to MEDIUM |
+| dueDate | Date | No | Task due date |
+| assigneeEmail | email | No | Email of assignee |
+
+**PUT /api/tasks/:id**
+
+Updates an existing task.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| title | string | No | Updated title |
+| description | string | No | Updated description |
+| status | enum | No | PENDING, IN_PROGRESS, or COMPLETED |
+| priority | enum | No | Updated priority |
+| dueDate | Date | No | Updated due date |
+| assigneeEmail | email | No | Updated assignee |
+
+**DELETE /api/tasks/:id**
+
+Removes a task from the database.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | string | Task ID to delete |
 
 ---
 
-## UI/UX Design
+## UI Component Design
 
 ### Component Hierarchy
 
 ```mermaid
 graph TB
-    subgraph "App Root"
+    subgraph App Root
         Root[RootLayout]
         Providers[SessionProvider + ThemeProvider]
     end
     
-    subgraph "Page Components"
+    subgraph Page Components
         LP[Landing Page]
         DB[Dashboard]
     end
     
-    subgraph "Shared Components"
+    subgraph Shared Components
         HD[Header]
         FT[Footer]
     end
     
-    subgraph "Task Components"
+    subgraph Task Components
         TB[TaskBoard]
         TF[TaskFormDialog]
         TC[TaskCard]
         DD[DeleteDialog]
     end
     
-    subgraph "UI Primitives"
+    subgraph UI Primitives
         BTN[Button]
         INP[Input]
         SLT[Select]
@@ -777,26 +623,35 @@ graph TB
     TF --> INP
     TF --> SLT
     TF --> DLG
-    DD --> DLG
-    DD --> BTN
 ```
 
-### User Flow Diagram
+### Component Responsibilities
+
+| Component | Responsibility |
+|-----------|----------------|
+| RootLayout | Provides HTML structure and global providers |
+| Header | Navigation, authentication controls, theme toggle |
+| TaskBoard | Displays tasks in kanban-style columns |
+| TaskCard | Individual task display with actions |
+| TaskFormDialog | Task creation and editing form |
+| DeleteDialog | Confirmation dialog for task deletion |
+
+### User Journey Flow
 
 ```mermaid
 flowchart TD
-    Start([User Visits App]) --> Check{Authenticated?}
+    Start[User Visits App] --> Check{Authenticated?}
     
     Check -->|No| Landing[Landing Page]
-    Landing --> Demo[Demo Login] 
+    Landing --> Demo[Demo Login]
     Landing --> Google[Google Sign In]
     
     Demo --> EnterEmail[Enter Email]
-    EnterEmail --> CreateUser[Create/Find User]
+    EnterEmail --> CreateUser[Find or Create User]
     CreateUser --> Dashboard
     
     Google --> GoogleOAuth[Google OAuth Flow]
-    GoogleOAuth --> GetUser[Get/Create User]
+    GoogleOAuth --> GetUser[Get or Create User]
     GetUser --> Dashboard
     
     Check -->|Yes| Dashboard[Dashboard View]
@@ -807,10 +662,10 @@ flowchart TD
     Dashboard --> AssignTask[Assign Task]
     Dashboard --> Logout[Sign Out]
     
-    CreateTask --> SaveDB[(Save to DB)]
-    EditTask --> UpdateDB[(Update DB)]
-    DeleteTask --> RemoveDB[(Remove from DB)]
-    AssignTask --> NotifyUser[Notify Assignee]
+    CreateTask --> SaveDB[(Save to Database)]
+    EditTask --> UpdateDB[(Update Database)]
+    DeleteTask --> RemoveDB[(Remove from Database)]
+    AssignTask --> NotifyUser[Notify Assignee via Socket]
     
     SaveDB --> Dashboard
     UpdateDB --> Dashboard
@@ -819,114 +674,103 @@ flowchart TD
     Logout --> Landing
 ```
 
-### Responsive Design Breakpoints
+---
 
-```mermaid
-graph LR
-    subgraph "Mobile (< 640px)"
-        M1[Single Column]
-        M2[Collapsible Menu]
-        M3[Touch Optimized]
-    end
-    
-    subgraph "Tablet (640-1024px)"
-        T1[Two Columns]
-        T2[Side Navigation]
-        T3[Hybrid Input]
-    end
-    
-    subgraph "Desktop (> 1024px)"
-        D1[Three Columns]
-        D2[Full Navigation]
-        D3[Keyboard Shortcuts]
-    end
-    
-    M1 --> T1
-    T1 --> D1
-```
+## State Management
 
-### State Management Flow
+### Zustand Store Architecture
 
 ```mermaid
 flowchart TD
-    subgraph "Zustand Store"
-        Z1[tasks: Task[]]
-        Z2[isLoading: boolean]
-        Z3[error: string | null]
-        
-        Z4[setTasks]
-        Z5[addTask]
-        Z6[updateTask]
-        Z7[removeTask]
+    subgraph Store State
+        S1[tasks: Task Array]
+        S2[isLoading: boolean]
+        S3[error: string or null]
     end
     
-    subgraph "React Components"
-        R1[TaskBoard]
-        R2[TaskCard]
-        R3[TaskForm]
+    subgraph Store Actions
+        A1[setTasks - Replace all tasks]
+        A2[addTask - Add single task]
+        A3[updateTask - Update existing task]
+        A4[removeTask - Delete task]
+        A5[setLoading - Toggle loading state]
+        A6[setError - Set error message]
     end
     
-    subgraph "API Layer"
-        A1[fetchTasks]
-        A2[createTask]
-        A3[updateTask]
-        A4[deleteTask]
+    subgraph React Components
+        C1[TaskBoard - Reads tasks]
+        C2[TaskCard - Reads single task]
+        C3[TaskForm - Calls addTask]
     end
     
-    R1 --> Z1
-    R2 --> Z1
-    R3 --> Z5
+    subgraph API Layer
+        API1[fetchTasks - Calls setTasks]
+        API2[createTask - Calls addTask]
+        API3[updateTask - Calls updateTask]
+        API4[deleteTask - Calls removeTask]
+    end
     
-    A1 --> Z4
-    A2 --> Z5
-    A3 --> Z6
-    A4 --> Z7
+    C1 --> S1
+    C2 --> S1
+    C3 --> A2
+    
+    API1 --> A1
+    API2 --> A2
+    API3 --> A3
+    API4 --> A4
 ```
+
+### Data Flow Pattern
+
+The application follows a unidirectional data flow:
+
+1. **User Action:** User interacts with a component
+2. **API Call:** Component triggers API request
+3. **Store Update:** API response updates Zustand store
+4. **UI Re-render:** React components re-render with new state
 
 ---
 
 ## Deployment Guide
 
-### Complete Deployment Architecture
+### Deployment Architecture Overview
 
 ```mermaid
 graph TB
-    subgraph "Development"
-        DEV[Local Development]
-        GIT[Git Repository]
+    subgraph Development
+        DEV[Local Development Environment]
+        GIT[Git Version Control]
     end
     
-    subgraph "Version Control"
+    subgraph Version Control
         GH[GitHub Repository]
-        ACTIONS[GitHub Actions]
     end
     
-    subgraph "Production - Frontend"
-        VC[Vercel]
+    subgraph Production Frontend
+        VC[Vercel Hosting]
         CDN[Vercel CDN]
         EDGE[Edge Functions]
     end
     
-    subgraph "Production - Backend"
-        RW[Railway]
+    subgraph Production Backend
+        RW[Railway Hosting]
         SOCK[Socket.io Server]
     end
     
-    subgraph "Production - Database"
+    subgraph Production Database
         SB[Supabase]
         PG[(PostgreSQL)]
     end
     
-    subgraph "External Services"
-        GCP[Google Cloud]
-        OAUTH[OAuth 2.0]
+    subgraph External Services
+        GCP[Google Cloud Platform]
+        OAUTH[OAuth 2.0 Service]
     end
     
     DEV --> GIT
     GIT --> GH
-    GH --> ACTIONS
-    ACTIONS --> VC
-    ACTIONS --> RW
+    GH --> VC
+    GH --> RW
     
     VC --> CDN
     VC --> EDGE
@@ -940,43 +784,43 @@ graph TB
     OAUTH --> GCP
 ```
 
-### Step-by-Step Deployment Flow
+### Step-by-Step Deployment Process
 
 ```mermaid
 flowchart TD
-    subgraph "Step 1: Database Setup"
+    subgraph Step 1 - Database
         S1A[Create Supabase Account]
         S1B[Create New Project]
         S1C[Get Connection String]
-        S1D[Run Migration SQL]
+        S1D[Run Database Migrations]
     end
     
-    subgraph "Step 2: OAuth Setup"
-        S2A[Go to Google Cloud Console]
+    subgraph Step 2 - OAuth
+        S2A[Access Google Cloud Console]
         S2B[Create OAuth Client]
         S2C[Configure Redirect URIs]
-        S2D[Get Client ID & Secret]
+        S2D[Obtain Client Credentials]
     end
     
-    subgraph "Step 3: Code Deployment"
-        S3A[Push to GitHub]
+    subgraph Step 3 - Frontend
+        S3A[Push Code to GitHub]
         S3B[Connect Vercel to GitHub]
-        S3C[Set Environment Variables]
-        S3D[Deploy Frontend]
+        S3C[Configure Environment Variables]
+        S3D[Deploy Application]
     end
     
-    subgraph "Step 4: Socket Service"
-        S4A[Create Separate Repo]
+    subgraph Step 4 - Socket Service
+        S4A[Create Socket Service Repository]
         S4B[Deploy to Railway]
-        S4C[Set CORS_ORIGIN]
-        S4D[Get Socket URL]
+        S4C[Set CORS Origin Variable]
+        S4D[Obtain Socket URL]
     end
     
-    subgraph "Step 5: Final Configuration"
+    subgraph Step 5 - Integration
         S5A[Add Socket URL to Vercel]
         S5B[Update Google OAuth URLs]
         S5C[Test All Features]
-        S5D[Monitor Logs]
+        S5D[Monitor Application Logs]
     end
     
     S1A --> S1B --> S1C --> S1D
@@ -991,81 +835,35 @@ flowchart TD
     S4D --> S5A
 ```
 
-### Environment Variables Configuration
+### Environment Variables
 
-```mermaid
-graph LR
-    subgraph "Vercel Environment"
-        V1[DATABASE_URL]
-        V2[GOOGLE_CLIENT_ID]
-        V3[GOOGLE_CLIENT_SECRET]
-        V4[NEXTAUTH_URL]
-        V5[NEXTAUTH_SECRET]
-        V6[NEXT_PUBLIC_SOCKET_URL]
-    end
-    
-    subgraph "Railway Environment"
-        R1[PORT]
-        R2[CORS_ORIGIN]
-    end
-    
-    subgraph "Local Development"
-        L1[.env file]
-        L2[DATABASE_URL=file:./dev.db]
-    end
-```
+**Vercel Environment Variables:**
 
-### Deployment Checklist
+| Variable | Description | Example |
+|----------|-------------|---------|
+| DATABASE_URL | PostgreSQL connection string | postgresql://user:pass@host:5432/db |
+| GOOGLE_CLIENT_ID | Google OAuth client ID | xxx.apps.googleusercontent.com |
+| GOOGLE_CLIENT_SECRET | Google OAuth client secret | GOCSPX-xxxx |
+| NEXTAUTH_URL | Application URL | https://your-app.vercel.app |
+| NEXTAUTH_SECRET | JWT encryption secret | random-32-char-string |
+| NEXT_PUBLIC_SOCKET_URL | Socket server URL | https://socket.railway.app |
 
-```mermaid
-mindmap
-  root((Deployment))
-    Database
-      Supabase Project
-      Connection String
-      Run Migrations
-      Create Enums
-    Authentication
-      Google Cloud Project
-      OAuth Consent Screen
-      Client ID
-      Client Secret
-      Redirect URIs
-    Frontend Vercel
-      GitHub Integration
-      Environment Variables
-      Domain Configuration
-      Build Settings
-    Socket Railway
-      Separate Repository
-      CORS Configuration
-      Port Configuration
-      WebSocket Support
-    Testing
-      Sign In Flow
-      Task CRUD
-      Real-time Updates
-      Mobile Responsive
-```
+**Railway Environment Variables:**
 
-### Vercel Configuration
+| Variable | Description | Example |
+|----------|-------------|---------|
+| PORT | Server port | 3003 |
+| CORS_ORIGIN | Allowed origin | https://your-app.vercel.app |
 
-```json
-{
-  "buildCommand": "prisma generate && next build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "regions": ["iad1"],
-  "env": {
-    "DATABASE_URL": "@database_url",
-    "GOOGLE_CLIENT_ID": "@google_client_id",
-    "GOOGLE_CLIENT_SECRET": "@google_client_secret",
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "NEXT_PUBLIC_SOCKET_URL": "@socket_url"
-  }
-}
-```
+### Deployment Verification Checklist
+
+| Check | Description |
+|-------|-------------|
+| Database Connection | Verify Prisma can connect to PostgreSQL |
+| Google OAuth | Test sign-in flow completes successfully |
+| Task CRUD | Create, update, and delete tasks |
+| Real-time Updates | Verify socket connection and live updates |
+| Responsive Design | Test on mobile, tablet, and desktop |
 
 ---
 
@@ -1073,154 +871,149 @@ mindmap
 
 ### Prerequisites
 
-- Node.js 18+ or Bun
-- PostgreSQL (or use SQLite for local dev)
-- Google Cloud account (for OAuth)
+- Node.js 18 or higher, or Bun runtime
+- PostgreSQL database (or use SQLite for development)
+- Google Cloud account for OAuth credentials
 
-### Setup Steps
+### Setup Instructions
 
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone https://github.com/anshsharmacse/taskflow.git
 cd taskflow
 
-# 2. Install dependencies
+# Install dependencies
 bun install
 
-# 3. Create .env file
+# Create environment file
 cp .env.example .env
 
-# 4. Edit .env with your credentials
-# DATABASE_URL="file:./dev.db"
-# GOOGLE_CLIENT_ID="your-client-id"
-# GOOGLE_CLIENT_SECRET="your-client-secret"
-# NEXTAUTH_URL="http://localhost:3000"
-# NEXTAUTH_SECRET="your-secret-key"
+# Configure environment variables
+# Edit .env with your credentials
 
-# 5. Initialize database
+# Initialize database
 bun run db:push
 
-# 6. Start development server
+# Start development server
 bun run dev
 
-# 7. In another terminal, start socket service
+# In separate terminal, start socket service
 cd mini-services/task-socket
 bun install
 bun run dev
 ```
 
-### Development Workflow
+### Environment Variables Template
 
-```mermaid
-flowchart LR
-    A[Code Changes] --> B[Local Test]
-    B --> C{Passes?}
-    C -->|No| A
-    C -->|Yes| D[Git Commit]
-    D --> E[Git Push]
-    E --> F[GitHub Actions]
-    F --> G{Build Passes?}
-    G -->|No| H[Fix Issues]
-    H --> A
-    G -->|Yes| I[Auto Deploy]
-    I --> J[Vercel Preview]
-    J --> K[Merge to Main]
-    K --> L[Production Deploy]
+```env
+# Database
+DATABASE_URL="file:./dev.db"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+
+# NextAuth Configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-random-secret-key"
+
+# Socket Service (optional for local dev)
+NEXT_PUBLIC_SOCKET_URL=""
 ```
 
 ### Project Structure
 
 ```
 taskflow/
-├── 📁 prisma/
-│   └── 📄 schema.prisma        # Database schema
-├── 📁 public/
-│   ├── 🖼️ logo.svg             # TaskFlow logo
-│   └── 🖼️ favicon.svg          # Favicon
-├── 📁 src/
-│   ├── 📁 app/
-│   │   ├── 📁 api/
-│   │   │   ├── 📁 auth/        # NextAuth routes
-│   │   │   └── 📁 tasks/       # Task API routes
-│   │   ├── 📄 globals.css      # Global styles
-│   │   ├── 📄 layout.tsx       # Root layout
-│   │   └── 📄 page.tsx         # Main page
-│   ├── 📁 components/
-│   │   ├── 📁 tasks/           # Task components
-│   │   ├── 📁 ui/              # shadcn/ui components
-│   │   └── 📁 providers/       # Context providers
-│   ├── 📁 hooks/
-│   │   ├── 📄 use-task-socket.ts
-│   │   ├── 📄 use-toast.ts
-│   │   └── 📄 use-mobile.ts
-│   └── 📁 lib/
-│       ├── 📄 auth.ts          # NextAuth config
-│       ├── 📄 db.ts            # Prisma client
-│       ├── 📄 store/           # Zustand store
-│       └── 📄 utils.ts         # Utilities
-├── 📁 mini-services/
-│   └── 📁 task-socket/         # Socket.io service
-├── 📄 package.json
-├── 📄 tailwind.config.ts
-├── 📄 tsconfig.json
-└── 📄 README.md
+├── prisma/
+│   └── schema.prisma          # Database schema
+├── public/
+│   ├── logo.svg               # Application logo
+│   └── favicon.svg            # Browser favicon
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── auth/          # Authentication routes
+│   │   │   └── tasks/         # Task API routes
+│   │   ├── globals.css        # Global styles
+│   │   ├── layout.tsx         # Root layout
+│   │   └── page.tsx           # Main application page
+│   ├── components/
+│   │   ├── tasks/             # Task-related components
+│   │   ├── ui/                # UI primitive components
+│   │   └── providers/         # Context providers
+│   ├── hooks/
+│   │   ├── use-task-socket.ts # Socket connection hook
+│   │   ├── use-toast.ts       # Toast notification hook
+│   │   └── use-mobile.ts      # Mobile detection hook
+│   └── lib/
+│       ├── auth.ts            # NextAuth configuration
+│       ├── db.ts              # Prisma client instance
+│       ├── store/             # Zustand store
+│       └── utils.ts           # Utility functions
+├── mini-services/
+│   └── task-socket/           # Socket.io service
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── README.md
 ```
 
 ---
 
 ## Testing
 
-### Test Strategy
+### Test Strategy Overview
 
 ```mermaid
 graph TB
-    subgraph "Unit Tests"
+    subgraph Unit Tests
         U1[Store Actions]
         U2[Utility Functions]
         U3[Validation Schemas]
     end
     
-    subgraph "Integration Tests"
-        I1[API Routes]
+    subgraph Integration Tests
+        I1[API Route Handlers]
         I2[Database Operations]
         I3[Authentication Flow]
     end
     
-    subgraph "E2E Tests"
-        E1[User Registration]
+    subgraph End-to-End Tests
+        E1[User Registration Flow]
         E2[Task CRUD Operations]
         E3[Real-time Updates]
     end
     
-    U1 --> R[Coverage Report]
-    U2 --> R
-    U3 --> R
-    I1 --> R
-    I2 --> R
-    I3 --> R
-    E1 --> R
-    E2 --> R
-    E3 --> R
+    U1 --> Report[Coverage Report]
+    U2 --> Report
+    U3 --> Report
+    I1 --> Report
+    I2 --> Report
+    I3 --> Report
+    E1 --> Report
+    E2 --> Report
+    E3 --> Report
 ```
 
-### Test Coverage
+### Test Coverage Summary
 
 | Component | Coverage | Description |
 |-----------|----------|-------------|
-| Task Store | 85% | Zustand store operations |
-| API Routes | 70% | CRUD operations |
-| Auth Flow | 60% | Sign in/out flows |
+| Task Store | 85% | Zustand store operations tested |
+| API Routes | 70% | CRUD operations covered |
+| Auth Flow | 60% | Core authentication paths tested |
 
 ### Running Tests
 
 ```bash
-# Run all tests
+# Execute all tests
 bun test
 
 # Run specific test file
 bun test src/lib/store/task-store.test.ts
 
-# Run with coverage
+# Generate coverage report
 bun test --coverage
 ```
 
@@ -1228,206 +1021,221 @@ bun test --coverage
 
 ## AI Usage Disclosure
 
-### AI Tools Used
+### AI Tools Utilized
 
 | Task | AI Tool | Purpose |
 |------|---------|---------|
-| Boilerplate Code | Claude AI | Initial component scaffolding |
-| Debugging | Claude AI | Error analysis and fixes |
-| Architecture | Claude AI | System design discussions |
-| Documentation | Claude AI | README structure and Mermaid diagrams |
+| Boilerplate Code | Claude AI | Initial component scaffolding and structure |
+| Debugging | Claude AI | Error analysis and solution recommendations |
+| Architecture Planning | Claude AI | System design discussions and decisions |
+| Documentation | Claude AI | README structure and diagram generation |
 
-### Manual Review & Changes
+### Manual Review and Modifications
 
-| Aspect | What Was Reviewed/Changed |
-|--------|---------------------------|
-| Authentication | Rewrote auth callbacks to handle Google OAuth without PrismaAdapter |
-| Socket Connection | Added fallback handling when socket URL not configured |
-| Error Handling | Enhanced error messages and user feedback |
-| UI Components | Customized colors, removed external branding |
-| Database | Created custom migration scripts for Supabase |
+| Area | Changes Made |
+|------|--------------|
+| Authentication | Rewrote callbacks to handle Google OAuth without PrismaAdapter |
+| Socket Connection | Added graceful fallback when socket service unavailable |
+| Error Handling | Enhanced error messages with user-friendly descriptions |
+| UI Styling | Customized color scheme and removed external branding |
+| Database | Created manual migration scripts for Supabase compatibility |
 
-### Example: Disagreement with AI Output
+### Disagreement with AI Output Example
 
-**AI Suggestion**: Use PrismaAdapter for NextAuth.js authentication
+**AI Suggestion:** Use PrismaAdapter for NextAuth.js authentication
 
 ```typescript
-// AI suggested:
-adapter: PrismaAdapter(db),
+// AI recommended approach
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(db),
+  // ...
+}
 ```
 
-**My Decision**: Removed PrismaAdapter and implemented custom callbacks
-
-**Reason**: The PrismaAdapter requires additional tables (accounts, sessions) that weren't initially created, and it added complexity. Custom callbacks give more control over user creation and don't require the adapter's additional table dependencies.
+**My Decision:** Implement custom callbacks without PrismaAdapter
 
 ```typescript
-// My implementation:
-callbacks: {
-  async signIn({ user, account }) {
-    if (account?.provider === "google" && user.email) {
-      const existingUser = await db.user.findUnique({
-        where: { email: user.email },
-      });
-      if (!existingUser) {
-        await db.user.create({ ... });
+// My implementation
+export const authOptions: NextAuthOptions = {
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google" && user.email) {
+        const existingUser = await db.user.findUnique({
+          where: { email: user.email },
+        });
+        if (!existingUser) {
+          await db.user.create({
+            data: {
+              email: user.email,
+              name: user.name,
+              image: user.image,
+              googleId: account.providerAccountId,
+              emailVerified: new Date(),
+            },
+          });
+        }
       }
-    }
-    return true;
+      return true;
+    },
   },
 }
 ```
 
+**Reasoning:** The PrismaAdapter requires additional database tables (accounts, sessions, verification_tokens) that added complexity without clear benefit for this use case. Custom callbacks provide more control over user creation logic and reduce database dependencies.
+
 ---
 
-## Assumptions & Trade-offs
+## Assumptions and Trade-offs
 
-### Assumptions Made
+### Assumptions Made During Development
 
 | Assumption | Rationale |
 |------------|-----------|
-| Users have Google accounts | Primary authentication is Google OAuth |
-| Single organization context | No multi-tenant support needed |
-| Email as unique identifier | Email is used for task assignment |
-| Soft real-time requirements | Occasional delay in updates is acceptable |
+| Users have Google accounts | Primary authentication method is Google OAuth |
+| Single organization context | No multi-tenant support required |
+| Email as unique identifier | Email addresses are used for task assignment |
+| Soft real-time requirements | Brief delays in updates are acceptable |
 
-### Trade-offs
+### Technical Trade-offs
 
 ```mermaid
 graph LR
-    subgraph "Chosen Approach"
+    subgraph Implemented Approach
         A[JWT Sessions]
         B[Socket.io]
         C[PostgreSQL]
-        D[Vercel + Railway]
+        D[Dual Deployment]
     end
     
-    subgraph "Alternative"
+    subgraph Alternative Approaches
         A2[Database Sessions]
-        B2[Polling]
+        B2[HTTP Polling]
         C2[MongoDB]
         D2[Single Platform]
     end
     
-    subgraph "Trade-off Reason"
-        R1[Scalability vs Simplicity]
-        R2[Real-time vs Complexity]
-        R3[Relations vs Flexibility]
-        R4[Features vs Convenience]
+    subgraph Trade-off Analysis
+        T1[Stateless vs Revocable]
+        T2[Real-time vs Simple]
+        T3[Relations vs Flexibility]
+        T4[Features vs Convenience]
     end
     
-    A -.-> R1
-    A2 -.-> R1
-    B -.-> R2
-    B2 -.-> R2
-    C -.-> R3
-    C2 -.-> R3
-    D -.-> R4
-    D2 -.-> R4
+    A -.-> T1
+    A2 -.-> T1
+    B -.-> T2
+    B2 -.-> T2
+    C -.-> T3
+    C2 -.-> T3
+    D -.-> T4
+    D2 -.-> T4
 ```
+
+### Trade-off Details
 
 | Decision | Trade-off | Reasoning |
 |----------|-----------|-----------|
-| JWT vs Database Sessions | Can't revoke sessions instantly | Stateless, scales better, simpler setup |
-| Socket.io vs WebSockets | Larger bundle size | Auto-reconnect, fallback to polling, room support |
-| PostgreSQL vs MongoDB | Less flexible schema | Strong relations for users/tasks, ACID compliance |
-| Dual Deployment | More complex setup | Vercel doesn't support WebSockets natively |
-| No PrismaAdapter | Manual user handling | Avoid extra tables, more control over auth flow |
+| JWT Sessions | Cannot instantly revoke sessions | Stateless approach scales better and simplifies setup |
+| Socket.io over WebSockets | Larger bundle size | Provides auto-reconnection, fallback polling, and room support |
+| PostgreSQL over MongoDB | Less flexible schema | Strong relational model for user-task relationships, ACID compliance |
+| Dual Platform Deployment | More complex setup | Vercel does not natively support persistent WebSocket connections |
+| No PrismaAdapter | Manual user handling | Avoids extra database tables and provides more control |
 
 ---
 
 ## Known Limitations
 
-### Current Limitations
+### Current Limitations Overview
 
 ```mermaid
 mindmap
   root((Limitations))
     Authentication
-      No Multi-factor Auth
-      No Password Login
-      Session cannot be revoked
+      No multi-factor authentication
+      No password-based login option
+      Sessions cannot be revoked instantly
     Real-time
-      Socket service required
+      Socket service required separately
       No offline support
-      Connection drops need refresh
+      Connection drops require page refresh
     Task Management
       No due date reminders
       No file attachments
       No task comments
-      No subtasks
-    Assignment
+      No subtask support
+    Team Features
       No team management
       No permission levels
       No bulk operations
 ```
 
-### Detailed Limitations
+### Limitation Details
 
 | Limitation | Impact | Potential Solution |
 |------------|--------|-------------------|
-| No MFA | Reduced security | Add TOTP/SMS verification |
-| Socket offline | Real-time breaks | Add service worker + sync queue |
-| No reminders | Tasks may be missed | Push notifications API |
-| No attachments | Limited context | S3 integration |
-| No comments | No discussion | Add comments table |
-| No subtasks | Complex tasks hard to manage | Self-referencing tasks |
+| No MFA Support | Reduced security for sensitive use cases | Implement TOTP or SMS verification |
+| Socket Service Dependency | Real-time breaks without socket service | Add offline-first with sync queue |
+| No Task Reminders | Tasks may be forgotten | Integrate push notification API |
+| No File Attachments | Limited context for tasks | Add S3-compatible storage integration |
+| No Comments | No discussion capability | Add comments table with relations |
+| No Subtasks | Complex tasks harder to manage | Implement self-referential task relations |
 
 ---
 
 ## Future Improvements
 
-### Roadmap
+### Development Roadmap
 
 ```mermaid
 timeline
-    title TaskFlow Roadmap
+    title TaskFlow Development Roadmap
     Q2 2026 : Push Notifications
             : Offline Support
-            : Task Reminders
+            : Task Due Date Reminders
     Q3 2026 : File Attachments
             : Task Comments
-            : Subtasks
+            : Subtask Support
     Q4 2026 : Team Management
             : Permission System
             : Analytics Dashboard
 ```
 
-### Priority Matrix
+### Feature Priority Analysis
 
 ```mermaid
 quadrantChart
-    title Feature Priority Matrix
+    title Feature Priority Analysis
     x-axis Low Effort --> High Effort
     y-axis Low Value --> High Value
     quadrant-1 Do First
     quadrant-2 Nice to Have
-    quadrant-3 Consider
-    quadrant-4 Avoid
-    Push Notifications: [0.3, 0.8]
-    Offline Support: [0.7, 0.9]
-    Task Comments: [0.4, 0.7]
-    File Attachments: [0.6, 0.6]
-    Team Management: [0.8, 0.8]
-    Analytics: [0.5, 0.5]
-    Subtasks: [0.5, 0.7]
+    quadrant-3 Consider Later
+    quadrant-4 Avoid For Now
+    Push Notifications: 0.3, 0.8
+    Offline Support: 0.7, 0.9
+    Task Comments: 0.4, 0.7
+    File Attachments: 0.6, 0.6
+    Team Management: 0.8, 0.8
+    Analytics: 0.5, 0.5
+    Subtasks: 0.5, 0.7
 ```
 
 ### Proposed Architecture Improvements
 
 ```mermaid
 graph TB
-    subgraph "Current"
+    subgraph Current Architecture
         C1[Monolithic Frontend]
         C2[Single Socket Server]
-        C3[Single Database]
+        C3[Single Database Instance]
     end
     
-    subgraph "Future"
+    subgraph Future Architecture
         F1[Micro-frontends]
         F2[Socket Cluster]
         F3[Read Replicas]
-        F4[Redis Cache]
-        F5[CDN for Assets]
+        F4[Redis Cache Layer]
+        F5[CDN for Static Assets]
         F6[Message Queue]
     end
     
@@ -1441,29 +1249,18 @@ graph TB
 
 ## Developer
 
-<div align="center">
+**Ansh Sharma**
 
-### **Ansh Sharma**
+National Institute of Technology Calicut
 
-*National Institute of Technology Calicut*
-
-[![GitHub](https://img.shields.io/badge/GitHub-anshsharmacse-black?style=flat-square&logo=github)](https://github.com/anshsharmacse)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/anshsharmacse)
-
-</div>
+**GitHub:** [github.com/anshsharmacse](https://github.com/anshsharmacse)
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
-<div align="center">
-
-**Built with ❤️ using Next.js, Prisma, and Socket.io**
-
-*If you found this project helpful, please consider giving it a ⭐ on GitHub!*
-
-</div>
+Built with Next.js, Prisma, and Socket.io
