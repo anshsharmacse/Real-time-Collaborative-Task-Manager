@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?  // Google profile image
+  googleId      String?  @unique // Google OAuth ID
+  emailVerified DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Tasks created by this user
+  createdTasks  Task[]   @relation("TaskCreator")
+  
+  // Tasks assigned to this user
+  assignedTasks Task[]   @relation("TaskAssignee")
+
+  @@map("users")
+}
+
+model Task {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus  @default(PENDING)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  
+  // Creator of the task
+  creatorId   String
+  creator     User        @relation("TaskCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  
+  // Assignee (can be null if not assigned or assigned to non-registered user)
+  assigneeId  String?
+  assignee    User?       @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  
+  // Email of assignee (used when assignee hasn't registered yet)
+  assigneeEmail String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  completedAt DateTime?
+
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
