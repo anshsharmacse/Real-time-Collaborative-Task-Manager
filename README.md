@@ -12,7 +12,7 @@
 
 ---
 
-## Live Demo
+## Deployed Link
 
 ### [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
 
