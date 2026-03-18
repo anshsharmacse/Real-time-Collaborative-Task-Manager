@@ -1,19 +1,15 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-// Prisma adapter for database integration
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "./db";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
+  // Don't use PrismaAdapter - handle user creation manually
   providers: [
-    // Google OAuth Provider (requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // Demo Credentials Provider for testing without Google OAuth
     CredentialsProvider({
       id: "demo-credentials",
       name: "Demo Account",
@@ -25,13 +21,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Find or create user
         let user = await db.user.findUnique({
           where: { email: credentials.email },
         });
 
         if (!user) {
-          // Create new user for demo
           user = await db.user.create({
             data: {
               email: credentials.email,
@@ -59,20 +53,68 @@ export const authOptions: NextAuthOptions = {
     error: "/",
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Handle Google sign in - create or update user
+      if (account?.provider === "google" && user.email) {
+        try {
+          const existingUser = await db.user.findUnique({
+            where: { email: user.email },
+          });
+
+          if (!existingUser) {
+            // Create new user from Google profile
+            await db.user.create({
+              data: {
+                email: user.email,
+                name: user.name || user.email.split("@")[0],
+                image: user.image,
+                googleId: account.providerAccountId,
+                emailVerified: new Date(),
+              },
+            });
+          } else {
+            // Update Google ID if not set
+            if (!existingUser.googleId) {
+              await db.user.update({
+                where: { id: existingUser.id },
+                data: {
+                  googleId: account.providerAccountId,
+                  image: user.image,
+                  emailVerified: new Date(),
+                },
+              });
+            }
+          }
+          return true;
+        } catch (error) {
+          console.error("Error in signIn callback:", error);
+          return false;
+        }
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }) {
-      // Initial sign in
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.picture = user.image;
       }
-      
-      // Update session
+
+      // Fetch user ID if not in token
+      if (!token.id && token.email) {
+        const dbUser = await db.user.findUnique({
+          where: { email: token.email as string },
+        });
+        if (dbUser) {
+          token.id = dbUser.id;
+        }
+      }
+
       if (trigger === "update" && session) {
         token = { ...token, ...session };
       }
-      
+
       return token;
     },
     async session({ session, token }) {
@@ -83,26 +125,6 @@ export const authOptions: NextAuthOptions = {
         session.user.image = token.picture as string;
       }
       return session;
-    },
-    async signIn() {
-      // Allow the sign-in
-      return true;
-    },
-  },
-  events: {
-    async signIn({ user, account }) {
-      // Update user info from Google profile
-      if (account?.provider === "google") {
-        await db.user.update({
-          where: { id: user.id },
-          data: {
-            googleId: account.providerAccountId,
-            name: user.name,
-            image: user.image,
-            emailVerified: new Date(),
-          },
-        });
-      }
     },
   },
   debug: process.env.NODE_ENV === "development",
