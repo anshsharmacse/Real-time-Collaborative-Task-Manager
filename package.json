@@ -4,16 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
-    "build": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && prisma migrate deploy && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "db:push": "prisma db push",
     "db:push:prod": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:migrate:prod": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma migrate dev",
-    "db:reset": "prisma migrate reset",
-    "db:seed": "bun prisma/seed.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
