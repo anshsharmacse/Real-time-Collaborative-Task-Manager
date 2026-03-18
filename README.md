@@ -44,13 +44,10 @@
 1. Open [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
 2. Click **"Demo Login"** or **Sign in using your Google Account**
 3. Enter any email address (e.g., `demo@example.com`) for Demo Login and **Email address** (e.g., `ansh@gmail.com`)  for Google account Login.
-4. Start creating and assigning tasks instantly
+4. Start creating and assigning tasks instantly.
 5.You may also change the task status using the **toggle** button and it will immediately reflect onto the dashboard.
 
 <img width="1895" height="896" alt="image" src="https://github.com/user-attachments/assets/322dde47-a73c-44d7-909d-ada2edc7c008" />
-
-
-**Note : No Google account required for demo access.**
 
 ---
 
