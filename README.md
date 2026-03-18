@@ -22,7 +22,7 @@
 
 **Socket Service:** [https://taskflow-socket-production.up.railway.app](https://taskflow-socket-production.up.railway.app)
 
-**Source Code:** [https://github.com/anshsharmacse/taskflow](https://github.com/anshsharmacse/taskflow)
+**Source Code:** [https://github.com/anshsharmacse/taskflow](https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager)
 
 ---
 
@@ -42,7 +42,7 @@
 ### Try the app in 30 seconds
 
 1. Open [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
-2. Click **"Demo Login"* or **Sign in using your Google Account**
+2. Click **"Demo Login"** or **Sign in using your Google Account**
 3. Enter any email address (e.g., `demo@example.com`) for Demo Login and **Google Email address** for Google account Login.
 4. Start creating and assigning tasks instantly
 5.You may also change the task status using the **toggle** button and it will immediately reflect onto the dashboard.
