@@ -2,6 +2,8 @@
 
 # Real-time Collaborative Task Manager
 ### A modern, production-ready collaborative task management application
+<img width="1919" height="807" alt="image" src="https://github.com/user-attachments/assets/51a005b8-c81d-4ee2-bc37-7d1f13de1736" />
+
 
 ### Featuring real-time updates, Google authentication, and seamless task assignment
 
