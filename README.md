@@ -20,7 +20,7 @@
 
 ---
 
-**Socket Service:** [https://taskflow-socket-production.up.railway.app](https://taskflow-socket-production.up.railway.app)
+**Socket Service:** [https://github.com/anshsharmacse/taskflow-socket](https://github.com/anshsharmacse/taskflow-socket)
 
 **Source Code:** [https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager](https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager)
 
