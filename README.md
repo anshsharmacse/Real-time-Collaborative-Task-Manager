@@ -3,7 +3,7 @@
 # Real-time Collaborative Task Manager
 
 <div align="center">
-<img width="1881" height="862" alt="image" src="https://github.com/user-attachments/assets/35dee6bc-688c-4d00-aaf2-1ffa5d6ee516" />
+<img width="1881" height="862" alt="TaskFlow Dashboard" src="https://github.com/user-attachments/assets/35dee6bc-688c-4d00-aaf2-1ffa5d6ee516" />
 
 
 ### A modern, production-ready collaborative task management application
@@ -14,7 +14,7 @@
 
 ## Deployed Link
 
-### [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
+### [https://taskflow-fawn-si.vercel.app](https://taskflow-fawn-psi.vercel.app)
 
 ### Click the link above to try the application now
 
@@ -22,7 +22,7 @@
 
 **Socket Service:** [https://taskflow-socket-production.up.railway.app](https://taskflow-socket-production.up.railway.app)
 
-**Source Code:** [https://github.com/anshsharmacse/taskflow](https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager)
+**Source Code:** [https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager](https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager)
 
 ---
 
@@ -43,11 +43,11 @@
 
 1. Open [https://taskflow-fawn-psi.vercel.app](https://taskflow-fawn-psi.vercel.app)
 2. Click **"Demo Login"** or **Sign in using your Google Account**
-3. Enter any email address (e.g., `demo@example.com`) for Demo Login and **Email address** (e.g., `ansh@gmail.com`)  for Google account Login.
-4. Start creating and assigning tasks instantly.
-5.You may also change the task status using the **toggle** button and it will immediately reflect onto the dashboard.
+3. Enter any email address (e.g., `demo@example.com`) for Demo Login
+4. Start creating and assigning tasks instantly
+5. Change task status using the **toggle** button - updates reflect immediately
 
-<img width="1895" height="896" alt="image" src="https://github.com/user-attachments/assets/322dde47-a73c-44d7-909d-ada2edc7c008" />
+<img width="1895" height="896" alt="TaskFlow Application Interface" src="https://github.com/user-attachments/assets/322dde47-a73c-44d7-909d-ada2edc7c008" />
 
 ---
 
@@ -128,6 +128,35 @@ The objective is to build a Real-time Collaborative Task Manager that demonstrat
 **Task Assignment Logic:** Users can assign tasks to anyone by entering their email address. If the assignee already exists in the system, the task immediately appears on their dashboard. If not, the email is stored and linked automatically when that person signs up.
 
 **Real-time Updates:** When a task is created, updated, or deleted, all connected clients receive instant notifications via WebSocket. This ensures everyone sees changes immediately without refreshing the page.
+
+### Feature Interaction Diagram
+
+```mermaid
+flowchart LR
+    subgraph User Actions
+        A1[Create Task]
+        A2[Edit Task]
+        A3[Delete Task]
+        A4[Assign Task]
+        A5[Change Status]
+    end
+    
+    subgraph System Response
+        S1[Save to Database]
+        S2[Notify via Socket]
+        S3[Update UI]
+    end
+    
+    A1 --> S1
+    A2 --> S1
+    A3 --> S1
+    A4 --> S1
+    A5 --> S1
+    S1 --> S2
+    S2 --> S3
+```
+
+**Feature Flow Explained:** All user actions flow through a consistent pipeline. The system first persists changes to the database, then broadcasts updates via Socket.io, and finally all connected clients update their UI automatically.
 
 ---
 
@@ -238,6 +267,25 @@ graph LR
 
 **Components Explanation:** The system is organized into three main layers. The User Interface layer contains all visible pages and components. The Core Services layer handles business logic for authentication, tasks, and notifications. The Data Services layer manages all database interactions through repository patterns.
 
+### Request Processing Pipeline
+
+```mermaid
+flowchart TD
+    A[User Request] --> B{Authenticated?}
+    B -->|No| C[Redirect to Login]
+    B -->|Yes| D[Parse Request]
+    D --> E[Validate Input]
+    E --> F{Valid?}
+    F -->|No| G[Return Error]
+    F -->|Yes| H[Process Business Logic]
+    H --> I[Database Operation]
+    I --> J[Emit Socket Event]
+    J --> K[Return Response]
+    K --> L[UI Update]
+```
+
+**Pipeline Explained:** Every request follows a strict processing pipeline. Authentication is checked first, followed by input validation. Valid requests proceed through business logic, database operations, and finally socket notifications before returning the response.
+
 ---
 
 ## Tech Stack Decisions
@@ -309,6 +357,48 @@ mindmap
 | **Form Handling** | React Hook Form | 7.x | Performant forms with minimal re-renders |
 | **Validation** | Zod | 4.x | TypeScript-first schema validation with type inference |
 
+### Technology Stack Layers
+
+```mermaid
+graph TB
+    subgraph "Presentation Layer"
+        P1[Tailwind CSS]
+        P2[shadcn/ui Components]
+        P3[Framer Motion]
+    end
+    
+    subgraph "Application Layer"
+        A1[Next.js App Router]
+        A2[React Components]
+        A3[Server Actions]
+    end
+    
+    subgraph "Business Layer"
+        B1[NextAuth.js]
+        B2[Zustand Store]
+        B3[API Routes]
+    end
+    
+    subgraph "Data Layer"
+        D1[Prisma ORM]
+        D2[PostgreSQL]
+        D3[Socket.io]
+    end
+    
+    P1 --> A1
+    P2 --> A2
+    P3 --> A2
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
+    B1 --> D1
+    B2 --> D3
+    B3 --> D1
+    D1 --> D2
+```
+
+**Layer Architecture Explained:** The application follows a layered architecture pattern. The presentation layer handles visual rendering, the application layer manages component logic, the business layer implements core functionality, and the data layer handles persistence and real-time communication.
+
 ---
 
 ## Database Design
@@ -350,7 +440,7 @@ erDiagram
     TASK }|--o| USER : assignee
 ```
 
-**Database Schema Explanation:** The database consists of two primary tables. The User table stores account information including Google OAuth identifiers. The Task table contains all task data with foreign key relationships to both the creator and optional assignee. The `assigneeEmail` field is crucial: it allows task assignment to users who haven't registered yet, with automatic linking when they sign up.
+**Database Schema Explanation:** The database consists of two primary tables. The User table stores account information including Google OAuth identifiers. The Task table contains all task data with foreign key relationships to both the creator and optional assignee. The `assigneeEmail` field is crucial: it allows task assignment to users who have not registered yet, with automatic linking when they sign up.
 
 ### Task Status State Machine
 
@@ -367,6 +457,29 @@ stateDiagram-v2
 
 **Status Transitions Explained:** Tasks follow a defined lifecycle. New tasks start in PENDING state, can move to IN_PROGRESS when work begins, and finally to COMPLETED. Users can reopen completed tasks or move in-progress tasks back to pending. Any task can be deleted from any state.
 
+### Task Priority Flow
+
+```mermaid
+flowchart LR
+    subgraph Priority Levels
+        L[LOW - Green]
+        M[MEDIUM - Yellow]
+        H[HIGH - Red]
+    end
+    
+    subgraph Visual Indicators
+        V1[Subtle Badge]
+        V2[Standard Badge]
+        V3[Prominent Badge]
+    end
+    
+    L --> V1
+    M --> V2
+    H --> V3
+```
+
+**Priority System Explained:** Tasks are categorized into three priority levels. Low priority tasks appear with a subtle green indicator, medium priority with a standard yellow indicator, and high priority tasks display a prominent red indicator for immediate attention.
+
 ### Database Performance Optimization
 
 ```sql
@@ -382,6 +495,38 @@ CREATE INDEX tasks_priority_idx ON tasks(priority);
 ```
 
 **Index Strategy Explained:** These indexes optimize the most common query patterns. The email index enables fast user lookups during authentication and task assignment. The foreign key indexes speed up JOIN operations when fetching tasks with their related users.
+
+### Data Access Patterns
+
+```mermaid
+flowchart TD
+    subgraph "Read Patterns"
+        R1[User Tasks by Creator]
+        R2[User Tasks by Assignee]
+        R3[Task by ID]
+    end
+    
+    subgraph "Write Patterns"
+        W1[Create Task]
+        W2[Update Status]
+        W3[Delete Task]
+    end
+    
+    subgraph "Index Usage"
+        I1[creatorId Index]
+        I2[assigneeId Index]
+        I3[Primary Key]
+    end
+    
+    R1 --> I1
+    R2 --> I2
+    R3 --> I3
+    W1 --> I1
+    W2 --> I3
+    W3 --> I3
+```
+
+**Access Patterns Explained:** The diagram shows how different operations utilize database indexes. Read operations leverage indexes for fast retrieval, while write operations use appropriate indexes for efficient updates. This design ensures consistent performance as data grows.
 
 ---
 
@@ -411,7 +556,7 @@ sequenceDiagram
     Client->>User: Redirect to Dashboard
 ```
 
-**OAuth Flow Explained:** When a user clicks "Sign in with Google," they're redirected to Google's OAuth consent screen. After granting permission, Google returns an authorization code which NextAuth exchanges for an access token. The system then creates or updates the user record and establishes a JWT session stored in an HTTP-only cookie.
+**OAuth Flow Explained:** When a user clicks "Sign in with Google," they are redirected to Google's OAuth consent screen. After granting permission, Google returns an authorization code which NextAuth exchanges for an access token. The system then creates or updates the user record and establishes a JWT session stored in an HTTP-only cookie.
 
 ### Demo Login Flow
 
@@ -455,7 +600,28 @@ flowchart LR
     end
 ```
 
-**Session Strategy Explained:** The application uses JWT-based sessions instead of database sessions. This approach is stateless, meaning the server doesn't need to store session data. The JWT contains the user ID and email, signed with a secret key. Each request includes the token in an HTTP-only cookie for security.
+**Session Strategy Explained:** The application uses JWT-based sessions instead of database sessions. This approach is stateless, meaning the server does not need to store session data. The JWT contains the user ID and email, signed with a secret key. Each request includes the token in an HTTP-only cookie for security.
+
+### Authentication Decision Flow
+
+```mermaid
+flowchart TD
+    A[User Visits App] --> B{Has Session Cookie?}
+    B -->|No| C[Show Landing Page]
+    C --> D{Choose Auth Method}
+    D -->|Google| E[Google OAuth Flow]
+    D -->|Demo| F[Demo Login Flow]
+    E --> G[Create/Update User]
+    F --> G
+    G --> H[Generate JWT]
+    H --> I[Set Cookie]
+    I --> J[Redirect to Dashboard]
+    B -->|Yes| K{Validate JWT}
+    K -->|Valid| J
+    K -->|Invalid| C
+```
+
+**Auth Decision Flow Explained:** This flowchart shows the complete authentication decision process. Users without a valid session see the landing page and choose their authentication method. After successful authentication, a JWT is generated and stored as a cookie before redirecting to the dashboard.
 
 ---
 
@@ -531,7 +697,7 @@ flowchart LR
     B2 --> B3
 ```
 
-**Room System Explained:** Each user joins two rooms when they connect: one based on their user ID and one based on their email address. This dual-room system ensures task assignment by email works correctly, even for users who haven't registered yet. When they sign up, they immediately receive their assigned tasks.
+**Room System Explained:** Each user joins two rooms when they connect: one based on their user ID and one based on their email address. This dual-room system ensures task assignment by email works correctly, even for users who have not registered yet. When they sign up, they immediately receive their assigned tasks.
 
 ### Real-time Update Scenarios
 
@@ -541,6 +707,44 @@ flowchart LR
 | Task Updated | `task:updated` | Creator and Assignee |
 | Task Deleted | `task:deleted` | Assignee (if exists) |
 | Status Changed | `task:updated` | All stakeholders |
+
+### Real-time Data Flow
+
+```mermaid
+flowchart TD
+    subgraph "Event Trigger"
+        T1[User Creates Task]
+    end
+    
+    subgraph "Processing"
+        P1[API Saves to DB]
+        P2[Client Emits Socket Event]
+        P3[Server Receives Event]
+    end
+    
+    subgraph "Broadcasting"
+        B1[Find Target Rooms]
+        B2[Emit to Each Room]
+    end
+    
+    subgraph "Client Update"
+        C1[Receive Event]
+        C2[Update Local State]
+        C3[Re-render UI]
+    end
+    
+    T1 --> P1
+    T1 --> P2
+    P1 --> P3
+    P2 --> P3
+    P3 --> B1
+    B1 --> B2
+    B2 --> C1
+    C1 --> C2
+    C2 --> C3
+```
+
+**Real-time Flow Explained:** This diagram shows the complete flow of real-time updates. When a user creates a task, the API saves it to the database while the client simultaneously emits a socket event. The server receives the event, determines target rooms, and broadcasts to all relevant clients who then update their UI.
 
 ---
 
@@ -643,6 +847,28 @@ Permanently removes a task from the database.
 |-----------|------|-------------|
 | id | string | Task ID to delete |
 
+### API Response Codes
+
+```mermaid
+flowchart LR
+    subgraph Success Codes
+        S1[200 OK - Get/Update]
+        S2[201 Created - POST]
+    end
+    
+    subgraph Client Error Codes
+        E1[400 Bad Request]
+        E2[401 Unauthorized]
+        E3[404 Not Found]
+    end
+    
+    subgraph Server Error Codes
+        E4[500 Internal Error]
+    end
+```
+
+**Response Codes Explained:** The API uses standard HTTP status codes. Success responses return 200 or 201 depending on the operation. Client errors indicate invalid requests, authentication issues, or missing resources. Server errors indicate unexpected backend failures.
+
 ---
 
 ## UI Component Design
@@ -742,6 +968,42 @@ flowchart TD
 
 **User Flow Explained:** This diagram maps every possible user journey through the application. Unauthenticated users see the landing page and can choose between demo login or Google authentication. Once authenticated, users access the dashboard where they can perform all task operations. Each action updates the database and, where relevant, notifies other users in real-time.
 
+### Component State Flow
+
+```mermaid
+flowchart TD
+    subgraph "User Interaction"
+        U1[Click Create Button]
+        U2[Fill Form]
+        U3[Submit Form]
+    end
+    
+    subgraph "Component State"
+        C1[Open Dialog]
+        C2[Validate Input]
+        C3[Loading State]
+        C4[Success/Error]
+    end
+    
+    subgraph "Store Update"
+        S1[Call API]
+        S2[Update Zustand Store]
+        S3[Trigger Re-render]
+    end
+    
+    U1 --> C1
+    C1 --> U2
+    U2 --> U3
+    U3 --> C2
+    C2 --> C3
+    C3 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> C4
+```
+
+**State Flow Explained:** This diagram shows how user interactions flow through component state. When a user interacts with the UI, components update their local state, call APIs, update the global store, and finally reflect changes in the UI.
+
 ---
 
 ## State Management
@@ -796,6 +1058,27 @@ flowchart TD
 2. **API Call:** Component invokes API service function
 3. **Response Handling:** API response updates the Zustand store
 4. **UI Update:** React re-renders affected components automatically
+
+### State Synchronization
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Component
+    participant Store
+    participant API
+    participant Socket
+    
+    User->>Component: Create Task
+    Component->>API: POST /api/tasks
+    API-->>Component: Task Response
+    Component->>Store: addTask
+    Store-->>Component: State Updated
+    Component->>Socket: Emit created event
+    Socket-->>Component: Broadcast to others
+```
+
+**Synchronization Explained:** State synchronization follows a dual-path approach. The primary path updates the store immediately after API success. The secondary path uses sockets to keep other clients in sync. This ensures all users see consistent state.
 
 ---
 
@@ -913,7 +1196,8 @@ flowchart TD
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
+| `DATABASE_URL` | PostgreSQL connection string with pgbouncer | `postgresql://user:pass@host:5432/db?pgbouncer=true` |
+| `DIRECT_DATABASE_URL` | Direct connection for migrations | `postgresql://user:pass@host:5432/postgres` |
 | `GOOGLE_CLIENT_ID` | Google OAuth client identifier | `xxx.apps.googleusercontent.com` |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | `GOCSPX-xxxx` |
 | `NEXTAUTH_URL` | Production application URL | `https://your-app.vercel.app` |
@@ -926,6 +1210,39 @@ flowchart TD
 |----------|-------------|---------|
 | `PORT` | Server listening port | `3003` |
 | `CORS_ORIGIN` | Allowed frontend origin | `https://your-app.vercel.app` |
+
+### CI/CD Pipeline
+
+```mermaid
+flowchart LR
+    subgraph "Source Control"
+        A[Git Push]
+    end
+    
+    subgraph "CI Pipeline"
+        B[Lint Check]
+        C[Type Check]
+        D[Build Test]
+    end
+    
+    subgraph "CD Pipeline"
+        E[Vercel Deploy]
+        F[Railway Deploy]
+    end
+    
+    subgraph "Verification"
+        G[Health Check]
+        H[Smoke Tests]
+    end
+    
+    A --> B --> C --> D --> E
+    D --> F
+    E --> G
+    F --> G
+    G --> H
+```
+
+**Pipeline Explained:** The CI/CD pipeline ensures code quality before deployment. Every push triggers lint and type checks, followed by a build test. Successful builds deploy automatically to Vercel and Railway, followed by health checks and smoke tests.
 
 ---
 
@@ -943,8 +1260,8 @@ flowchart TD
 
 ```bash
 # Clone the repository
-git clone https://github.com/anshsharmacse/taskflow.git
-cd taskflow
+git clone https://github.com/anshsharmacse/Real-time-Collaborative-Task-Manager.git
+cd Real-time-Collaborative-Task-Manager
 
 # Install dependencies
 bun install
@@ -1009,6 +1326,25 @@ taskflow/
 └── README.md
 ```
 
+### Development Workflow
+
+```mermaid
+flowchart TD
+    A[Clone Repository] --> B[Install Dependencies]
+    B --> C[Configure Environment]
+    C --> D[Initialize Database]
+    D --> E[Start Development Server]
+    E --> F[Make Changes]
+    F --> G{Tests Pass?}
+    G -->|Yes| H[Commit Changes]
+    G -->|No| F
+    H --> I[Push to GitHub]
+    I --> J[CI Pipeline Runs]
+    J --> K[Deploy to Preview]
+```
+
+**Workflow Explained:** Local development follows a standard Git workflow. After setup, developers make changes, run tests locally, commit, and push. The CI pipeline validates changes before deploying to a preview environment for final verification.
+
 ---
 
 ## Testing Strategy
@@ -1068,6 +1404,21 @@ bun test src/lib/store/task-store.test.ts
 # Generate coverage report
 bun test --coverage
 ```
+
+### Test Pyramid
+
+```mermaid
+graph BT
+    subgraph "Test Pyramid"
+        A[Unit Tests - Many Fast Tests]
+        B[Integration Tests - Moderate Tests]
+        C[E2E Tests - Few Slow Tests]
+    end
+    
+    A --> B --> C
+```
+
+**Test Pyramid Explained:** The test pyramid illustrates the ideal test distribution. Unit tests form the base with many fast, isolated tests. Integration tests are fewer and slower. E2E tests are the fewest and slowest but provide the highest confidence in user-facing functionality.
 
 ---
 
@@ -1177,6 +1528,19 @@ The PrismaAdapter requires additional database tables (`accounts`, `sessions`, `
 
 This decision proved valuable during deployment when debugging authentication issues, as I had complete control over the callback logic.
 
+### AI Assistance Breakdown
+
+```mermaid
+pie title AI Contribution by Category
+    "Boilerplate Code" : 35
+    "Debugging Help" : 25
+    "Documentation" : 20
+    "Architecture Planning" : 15
+    "Code Review" : 5
+```
+
+**Contribution Breakdown Explained:** The pie chart shows the distribution of AI assistance across different development activities. Boilerplate code generation received the most assistance, followed by debugging help and documentation. Architecture planning and code review received targeted assistance for complex decisions.
+
 ---
 
 ## Assumptions and Trade-offs
@@ -1234,8 +1598,29 @@ graph LR
 | JWT Sessions | Cannot revoke sessions instantly | Stateless approach scales better and eliminates database session storage |
 | Socket.io over raw WebSockets | Larger bundle size | Provides auto-reconnection, fallback to polling, and room-based broadcasting |
 | PostgreSQL over MongoDB | Less flexible schema | Strong relational model fits user-task relationships, ACID compliance critical for data integrity |
-| Dual Platform (Vercel + Railway) | More deployment steps | Vercel doesn't support persistent WebSocket connections natively |
+| Dual Platform (Vercel + Railway) | More deployment steps | Vercel does not support persistent WebSocket connections natively |
 | Custom Auth Callbacks | More code to maintain | Avoids PrismaAdapter dependencies and provides full control |
+
+### Decision Impact Matrix
+
+```mermaid
+flowchart TD
+    subgraph High Impact Decisions
+        H1[JWT Sessions - Scalability Win]
+        H2[Socket.io - Real-time Win]
+    end
+    
+    subgraph Medium Impact Decisions
+        M1[PostgreSQL - Data Integrity Win]
+        M2[Dual Deploy - Feature Enable]
+    end
+    
+    subgraph Low Impact Decisions
+        L1[Custom Auth - Control Win]
+    end
+```
+
+**Impact Analysis Explained:** This diagram categorizes decisions by their impact on the project. JWT sessions and Socket.io were high-impact decisions that fundamentally shaped the architecture. PostgreSQL and dual deployment were medium-impact decisions balancing trade-offs. Custom auth was a lower-impact decision focused on control.
 
 ---
 
@@ -1244,28 +1629,34 @@ graph LR
 ### Current Limitations
 
 ```mermaid
-mindmap
-  root((Limitations))
-    Authentication
-      No multi-factor authentication
-      No password-based login option
-      Sessions cannot be revoked instantly
-    Real-time
-      Socket service required separately
-      No offline support
-      Connection drops require page refresh
-    Task Management
-      No due date reminders
-      No file attachments
-      No task comments
-      No subtask support
-    Team Features
-      No team management
-      No permission levels
-      No bulk operations
+flowchart TD
+    subgraph Authentication
+        A1[No multi-factor authentication]
+        A2[No password-based login]
+        A3[Sessions cannot be revoked]
+    end
+    
+    subgraph Real-time
+        R1[Socket service required]
+        R2[No offline support]
+        R3[Connection drops need refresh]
+    end
+    
+    subgraph Task Management
+        T1[No due date reminders]
+        T2[No file attachments]
+        T3[No task comments]
+        T4[No subtask support]
+    end
+    
+    subgraph Team Features
+        F1[No team management]
+        F2[No permission levels]
+        F3[No bulk operations]
+    end
 ```
 
-**Limitations Explained:** The mind map above categorizes all known limitations. Authentication lacks advanced security features. Real-time requires continuous connectivity. Task management misses some advanced features. Team collaboration is basic without permission systems.
+**Limitations Explained:** The diagram categorizes all known limitations by feature area. Authentication lacks advanced security features. Real-time requires continuous connectivity. Task management misses some advanced features. Team collaboration is basic without permission systems.
 
 ### Impact Analysis and Solutions
 
@@ -1300,27 +1691,16 @@ timeline
 
 **Roadmap Explained:** The development timeline shows planned improvements. Q2 focuses on notifications and offline capabilities. Q3 adds rich content features. Q4 introduces team collaboration and analytics.
 
-### Feature Priority Matrix
+### Feature Priority Analysis
 
-```mermaid
-quadrantChart
-    title Feature Priority Analysis
-    x-axis Low Effort --> High Effort
-    y-axis Low Value --> High Value
-    quadrant-1 Do First
-    quadrant-2 Nice to Have
-    quadrant-3 Consider Later
-    quadrant-4 Avoid For Now
-    Push Notifications: 0.3, 0.8
-    Offline Support: 0.7, 0.9
-    Task Comments: 0.4, 0.7
-    File Attachments: 0.6, 0.6
-    Team Management: 0.8, 0.8
-    Analytics: 0.5, 0.5
-    Subtasks: 0.5, 0.7
-```
-
-**Priority Analysis Explained:** This quadrant chart prioritizes features by effort and value. Push notifications and offline support rank highest for value. Team management requires significant effort but provides substantial value. Analytics falls in the middle for both dimensions.
+| Feature | Effort | Value | Priority |
+|---------|--------|-------|----------|
+| Push Notifications | Low | High | Do First |
+| Offline Support | Medium | High | High |
+| Task Comments | Low | Medium | Medium |
+| File Attachments | Medium | Medium | Medium |
+| Team Management | High | High | Plan Carefully |
+| Analytics | Medium | Medium | Consider Later |
 
 ### Architecture Evolution
 
