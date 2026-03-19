@@ -1,6 +1,4 @@
-# TaskFlow
-
-# Real-time Collaborative Task Manager
+# TaskFlow: Real-time Collaborative Task Manager
 
 <div align="center">
 <img width="1881" height="862" alt="TaskFlow Dashboard" src="https://github.com/user-attachments/assets/35dee6bc-688c-4d00-aaf2-1ffa5d6ee516" />
