@@ -405,10 +405,9 @@ graph TB
 
 ### Entity Relationship Diagram
 
-```mermaid
 erDiagram
     USER ||--o{ TASK : creates
-    USER ||--o{ TASK : assigned to
+    USER ||--o{ TASK : is_assigned_to
     
     USER {
         string id PK
@@ -425,8 +424,8 @@ erDiagram
         string id PK
         string title
         string description
-        enum status
-        enum priority
+        string status
+        string priority
         datetime dueDate
         string creatorId FK
         string assigneeId FK
@@ -435,10 +434,6 @@ erDiagram
         datetime updatedAt
         datetime completedAt
     }
-    
-    TASK }|--|| USER : creator
-    TASK }|--o| USER : assignee
-```
 
 **Database Schema Explanation:** The database consists of two primary tables. The User table stores account information including Google OAuth identifiers. The Task table contains all task data with foreign key relationships to both the creator and optional assignee. The `assigneeEmail` field is crucial: it allows task assignment to users who have not registered yet, with automatic linking when they sign up.
 
