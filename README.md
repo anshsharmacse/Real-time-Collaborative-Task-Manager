@@ -1586,7 +1586,7 @@ graph LR
 | Custom Auth Callbacks | More code to maintain | Avoids PrismaAdapter dependencies and provides full control |
 
 ### Decision Impact Matrix
-
+```mermaid
 flowchart TB
     A["Architecture Decisions"]
 
@@ -1620,6 +1620,7 @@ flowchart TB
     class H1,H2 high;
     class M1,M2 medium;
     class L1 low;
+```
 
 **Impact Analysis Explained:** This diagram categorizes decisions by their impact on the project. JWT sessions and Socket.io were high-impact decisions that fundamentally shaped the architecture. PostgreSQL and dual deployment were medium-impact decisions balancing trade-offs. Custom auth was a lower-impact decision focused on control.
 
