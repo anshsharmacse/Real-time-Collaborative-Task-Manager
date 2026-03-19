@@ -640,6 +640,7 @@ sequenceDiagram
 **Connection Lifecycle Explained:** When a user opens the app, the client establishes a WebSocket connection to the Socket.io server. After connection, the client sends authentication details. The server registers the user in rooms based on their ID and email. When events occur, the server broadcasts to relevant rooms, and clients update their UI in real-time.
 
 ### Socket Event Architecture
+
 <img width="1728" height="467" alt="image" src="https://github.com/user-attachments/assets/8f5c53df-6777-472e-a886-edcfbc23c86d" />
 
 
