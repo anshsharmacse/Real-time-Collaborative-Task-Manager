@@ -1587,22 +1587,39 @@ graph LR
 
 ### Decision Impact Matrix
 
-```mermaid
-flowchart TD
-    subgraph High Impact Decisions
-        H1[JWT Sessions - Scalability Win]
-        H2[Socket.io - Real-time Win]
+flowchart TB
+    A["Architecture Decisions"]
+
+    subgraph HID["High Impact Decisions"]
+        H1["JWT Sessions"]
+        H2["Socket.io"]
     end
-    
-    subgraph Medium Impact Decisions
-        M1[PostgreSQL - Data Integrity Win]
-        M2[Dual Deploy - Feature Enable]
+
+    subgraph MID["Medium Impact Decisions"]
+        M1["PostgreSQL"]
+        M2["Dual Deploy"]
     end
-    
-    subgraph Low Impact Decisions
-        L1[Custom Auth - Control Win]
+
+    subgraph LID["Low Impact Decisions"]
+        L1["Custom Auth"]
     end
-```
+
+    A --> HID
+    A --> MID
+    A --> LID
+
+    H1 --- H2
+    M1 --- M2
+
+    classDef root fill:#ede9fe,stroke:#7c3aed,stroke-width:2px;
+    classDef high fill:#dbeafe,stroke:#2563eb,stroke-width:2px;
+    classDef medium fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+    classDef low fill:#dcfce7,stroke:#16a34a,stroke-width:2px;
+
+    class A root;
+    class H1,H2 high;
+    class M1,M2 medium;
+    class L1 low;
 
 **Impact Analysis Explained:** This diagram categorizes decisions by their impact on the project. JWT sessions and Socket.io were high-impact decisions that fundamentally shaped the architecture. PostgreSQL and dual deployment were medium-impact decisions balancing trade-offs. Custom auth was a lower-impact decision focused on control.
 
