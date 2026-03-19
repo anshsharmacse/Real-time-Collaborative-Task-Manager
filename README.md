@@ -1722,7 +1722,6 @@ graph TB
 ---
 
 ## Developer Information
-```markdown
 <div align="center">
 
 ### **Ansh Sharma**
@@ -1736,7 +1735,6 @@ graph TB
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Ansh_Sharma-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/anshsharmacse/)
 
 </div>
-```
 ---
 
 ## License
