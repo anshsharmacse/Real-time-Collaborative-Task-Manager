@@ -1527,8 +1527,7 @@ This decision proved valuable during deployment when debugging authentication is
 
 ### AI Assistance Breakdown
 
-pie showData
-    title AI Contribution by Category
+pie title AI Contribution by Category
     "Boilerplate Code" : 35
     "Debugging Help" : 25
     "Documentation" : 20
