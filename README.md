@@ -1527,15 +1527,14 @@ This decision proved valuable during deployment when debugging authentication is
 
 ### AI Assistance Breakdown
 
-```mermaid
-pie title AI Contribution by Category
+pie showData
+    title AI Contribution by Category
     "Boilerplate Code" : 35
     "Debugging Help" : 25
     "Documentation" : 20
     "Architecture Planning" : 15
     "Code Review" : 5
-```
-
+    
 **Contribution Breakdown Explained:** The pie chart shows the distribution of AI assistance across different development activities. Boilerplate code generation received the most assistance, followed by debugging help and documentation. Architecture planning and code review received targeted assistance for complex decisions.
 
 ---
