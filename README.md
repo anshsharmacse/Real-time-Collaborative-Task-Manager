@@ -76,15 +76,6 @@
 
 ## Project Overview
 
-### Assignment Context
-
-| Aspect | Details |
-|--------|---------|
-| Project Type | Real-time Collaborative Task Manager |
-| Expected Duration | 6 to 10 hours |
-| Submission Deadline | March 21, 2026, 11:59 PM |
-| Delivery Method | GitHub Repository Link |
-
 ### Problem Statement
 
 The objective is to build a Real-time Collaborative Task Manager that demonstrates proficiency in:
