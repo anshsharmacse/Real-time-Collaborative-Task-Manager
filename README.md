@@ -1722,22 +1722,26 @@ graph TB
 ---
 
 ## Developer Information
+
 <div align="center">
 
 ### **Ansh Sharma**
 
 **National Institute of Technology Calicut**
 
+---
+
 [![GitHub](https://img.shields.io/badge/GitHub-anshsharmacse-black?style=for-the-badge&logo=github)](https://github.com/anshsharmacse)
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Ansh_Sharma-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/anshsharmacse/)
 
 </div>
+
 ---
+
 ## License
 
 This project is released under the MIT License.
-
 ---
 
 <div align="center">
