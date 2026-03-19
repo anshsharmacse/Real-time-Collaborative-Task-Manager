@@ -1722,7 +1722,7 @@ graph TB
 ---
 
 ## Developer Information
-
+```markdown
 <div align="center">
 
 ### **Ansh Sharma**
@@ -1731,12 +1731,12 @@ graph TB
 
 ---
 
-**GitHub:** [github.com/anshsharmacse](https://github.com/anshsharmacse)
-**Linkedin:**[https://www.linkedin.com/in/anshsharmacse/](https://www.linkedin.com/in/anshsharmacse/)
----
+[![GitHub](https://img.shields.io/badge/GitHub-anshsharmacse-black?style=for-the-badge&logo=github)](https://github.com/anshsharmacse)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ansh_Sharma-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/anshsharmacse/)
 
 </div>
-
+```
 ---
 
 ## License
