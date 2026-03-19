@@ -1732,7 +1732,7 @@ graph TB
 ---
 
 **GitHub:** [github.com/anshsharmacse](https://github.com/anshsharmacse)
-
+**Linkedin:**[https://www.linkedin.com/in/anshsharmacse/](https://www.linkedin.com/in/anshsharmacse/)
 ---
 
 </div>
