@@ -94,14 +94,20 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async jwt({ token, user, trigger, session }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.picture = user.image;
+      // Initial sign in - fetch database user to get correct ID
+      if (user?.email) {
+        const dbUser = await db.user.findUnique({
+          where: { email: user.email },
+        });
+        if (dbUser) {
+          token.id = dbUser.id;  // Use database ID, not Google ID
+          token.email = dbUser.email;
+          token.name = dbUser.name;
+          token.picture = dbUser.image;
+        }
       }
 
-      // Fetch user ID if not in token
+      // Fetch user ID if not in token (token refresh)
       if (!token.id && token.email) {
         const dbUser = await db.user.findUnique({
           where: { email: token.email as string },
